@@ -3,7 +3,7 @@ package com.sixt.task.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.sixt.task.model.CarRepository
-import com.sixt.task.model.CarVO
+import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
 import com.sixt.task.util.SchedulerProvider
 import com.sixt.task.util.getCarsList
@@ -25,7 +25,7 @@ class CarViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val repository = mockk<CarRepository>(relaxed = true)
-    private val mockedObserver = mockk<Observer<Resource<List<CarVO>>>>(relaxed = true)
+    private val mockedObserver = mockk<Observer<Resource<List<Car>>>>(relaxed = true)
     private lateinit var viewModel: CarViewModel
 
     @Before
@@ -42,8 +42,8 @@ class CarViewModelTest {
 
         viewModel.loadData()
 
-        val slot1 = slot<Resource<List<CarVO>>>()
-        val slot2 = slot<Resource<List<CarVO>>>()
+        val slot1 = slot<Resource<List<Car>>>()
+        val slot2 = slot<Resource<List<Car>>>()
         verifySequence {
             mockedObserver.onChanged(capture(slot1))
             mockedObserver.onChanged(capture(slot2))
@@ -63,8 +63,8 @@ class CarViewModelTest {
 
         viewModel.loadData()
 
-        val slot1 = slot<Resource<List<CarVO>>>()
-        val slot2 = slot<Resource<List<CarVO>>>()
+        val slot1 = slot<Resource<List<Car>>>()
+        val slot2 = slot<Resource<List<Car>>>()
         verifySequence {
             mockedObserver.onChanged(capture(slot1))
             mockedObserver.onChanged(capture(slot2))
@@ -76,7 +76,7 @@ class CarViewModelTest {
     }
 
     @Test
-    fun `Given an error occurred but without any custom message, when loadData method is called, then the observer must be notified of data being loaded and then the error with default message`() {
+    fun `Given an error occurred without any custom message, when loadData method is called, then the observer must be notified of data being loaded and then the error with default message`() {
         viewModel.getCars().observeForever(mockedObserver)
 
         val response = Throwable()
@@ -84,7 +84,7 @@ class CarViewModelTest {
 
         viewModel.loadData()
 
-        val slot = slot<Resource<List<CarVO>>>()
+        val slot = slot<Resource<List<Car>>>()
         verify {
             mockedObserver.onChanged(capture(slot))
         }

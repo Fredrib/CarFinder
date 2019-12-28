@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sixt.task.model.CarRepository
-import com.sixt.task.model.CarVO
+import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
 import com.sixt.task.util.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -14,10 +14,10 @@ class CarViewModel(
     private val schedulerProvider: SchedulerProvider
 ) : ViewModel() {
 
-    private val carsLiveData = MutableLiveData<Resource<List<CarVO>>>()
+    private val carsLiveData = MutableLiveData<Resource<List<Car>>>()
     private val disposables = CompositeDisposable()
 
-    fun getCars(): LiveData<Resource<List<CarVO>>> {
+    fun getCars(): LiveData<Resource<List<Car>>> {
         return carsLiveData
     }
 

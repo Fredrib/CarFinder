@@ -15,6 +15,10 @@ buildscript {
         junit_version = "4.12"
         espresso_version = '3.2.0'
         arch_core_testing= '2.1.0'
+        koin_version = '2.0.1'
+        okhttp_version = '3.12.0'
+        retrofit_version = '2.5.0'
+        mockwebserver_version = '4.2.1'
         minSdk = 21
         targetSdk = 29
         compileSdk = 29

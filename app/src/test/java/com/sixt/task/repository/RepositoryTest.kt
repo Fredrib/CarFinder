@@ -1,9 +1,9 @@
-package com.sixt.task.reposiotory
+package com.sixt.task.repository
 
 import com.sixt.task.model.DefaultCarRepository
 import com.sixt.task.util.RxImmediateSchedulerRule
 import com.sixt.task.util.getCarsList
-import com.sixt.task.webservice.ServiceApi
+import com.sixt.task.network.ServiceApi
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single
@@ -26,9 +26,9 @@ class RepositoryTest {
     }
 
     @Test
-    fun `when is requested a list of cars, then repository should provide the cars list`() {
+    fun `Given a sucessful response with the car list, when is requested a list of cars, then the repository should provide the cars list`() {
         val response = getCarsList()
-        every { serviceApi.fetchData() } returns Single.just(response)
+        every { serviceApi.cars() } returns Single.just(response)
 
         defaultCarRepository
             .getCars()

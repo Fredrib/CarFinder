@@ -17,8 +17,13 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "BASE_URL", "\"https://cdn.sixt.io/codingtask\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField "String", "BASE_URL", "\"https://cdn.sixt.io/codingtask\""
         }
     }
 }
@@ -32,10 +37,17 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "androidx.arch.core:core-testing:$arch_core_testing"
+    testImplementation "org.koin:koin-test:$koin_version"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver_version"
 
     androidTestImplementation "androidx.test.ext:junit:$androidx_test"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
