@@ -7,6 +7,6 @@ import retrofit2.http.Path
 
 interface ServiceApi {
 
-    @GET("/cars")
+    @GET("codingtask/cars")
     fun cars(): Single<List<Car>>
 }

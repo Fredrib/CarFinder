@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Task</string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- Car List Item -->
+    <string name="car_image_description">Car Model Image</string>
+    <string name="car_transmission_image_description">Car Transmission Image</string>
+    <string name="car_fuel_image_description">Car Fuel Image</string>
 </resources>

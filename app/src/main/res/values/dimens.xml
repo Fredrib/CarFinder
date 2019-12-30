@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="base_margins">16dp</dimen>
+
+    <!-- TEXT SIZES -->
+    <dimen name="text_grid">4dp</dimen>
+    <dimen name="text_size_H0">12sp</dimen>
+    <dimen name="text_size_H1">14sp</dimen>
+    <dimen name="text_size_H2">16sp</dimen>
+    <dimen name="text_size_H3">18sp</dimen>
+    <dimen name="text_size_H4">20sp</dimen>
+    <dimen name="text_size_H5">22sp</dimen>
+</resources>

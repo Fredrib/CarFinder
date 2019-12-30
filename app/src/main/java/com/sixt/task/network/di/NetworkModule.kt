@@ -1,11 +1,13 @@
 package com.sixt.task.network.di
 
+import com.sixt.task.BuildConfig
 import com.sixt.task.network.ConnectionVerifier
 import com.sixt.task.network.ConnectivityInterceptor
 import com.sixt.task.network.DefaultRouteProvider
 import com.sixt.task.network.RouteProvider
 import com.sixt.task.network.ServiceApi
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -18,6 +20,13 @@ object NetworkModule {
     ) =
         OkHttpClient.Builder()
             .addInterceptor(connectivityInterceptor)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
+            }
             .build()
 
     private fun retrofit(
