@@ -1,11 +1,14 @@
-package com.sixt.task.view
+package com.sixt.task.view.map
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,9 +20,11 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sixt.task.R
 import com.sixt.task.model.Resource
 import com.sixt.task.model.vo.Car
+import com.sixt.task.view.list.ListActivity
 import com.sixt.task.viewmodel.CarViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,6 +32,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private val viewModel by viewModel<CarViewModel>()
+
+    private val listButton by lazy { findViewById<FloatingActionButton>(R.id.fab) }
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -38,9 +45,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        listButton.setOnClickListener { openList() }
         viewModel.loadData()
     }
-
 
     /**
      * Manipulates the map once available.
@@ -61,13 +68,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 when (resource) {
                     is Resource.Loading -> Log.e("ListFragment", "showing loading")
                     is Resource.Error -> Log.e("ListFragment", "showing error")
-                    is Resource.Success -> it.data?.let { list -> placeCars(list) }
+                    is Resource.Success -> {
+                        it.data?.let { list -> placeCars(list) }
+                        enableListButton()
+                    }
                 }
             }
         })
 
-        viewModel.focalPoint().observe(this, Observer { point ->
-            map.moveCamera(CameraUpdateFactory.newLatLng(LatLng(point.latitude, point.longitude)))
+        viewModel.focalArea().observe(this, Observer { point ->
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(point, 0))
         })
     }
 
@@ -85,6 +95,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun enableListButton() {
+        listButton.show()
+    }
+
+    private fun openList() {
+        startActivityForResult(
+            Intent(this, ListActivity::class.java),
+            LIST_REQUEST_CODE
+        )
+    }
+
     private fun bitmapDescriptorFromVector(
         context: Context,
         vectorResId:Int
@@ -92,7 +113,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
 
         if (vectorDrawable != null) {
-            vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+            vectorDrawable.setBounds(
+                0,
+                0,
+                vectorDrawable.intrinsicWidth,
+                vectorDrawable.intrinsicHeight
+            )
             val bitmap = Bitmap.createBitmap(
                 vectorDrawable.intrinsicWidth,
                 vectorDrawable.intrinsicHeight,
@@ -104,5 +130,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         throw Exception("Could not find the vector resource. Check the resource id.")
+    }
+
+    companion object {
+        const val LIST_REQUEST_CODE = 0x01
     }
 }

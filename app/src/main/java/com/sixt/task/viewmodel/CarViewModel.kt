@@ -3,8 +3,10 @@ package com.sixt.task.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.sixt.task.model.CarRepository
-import com.sixt.task.model.FocalPointProvider
+import com.sixt.task.model.FocalAreaProvider
 import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
 import com.sixt.task.model.vo.Point
@@ -14,12 +16,12 @@ import io.reactivex.disposables.CompositeDisposable
 class CarViewModel(
     private val repository: CarRepository,
     private val schedulerProvider: SchedulerProvider,
-    private val focalPointProvider: FocalPointProvider
+    private val focalAreaProvider: FocalAreaProvider
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val carsLiveData = MutableLiveData<Resource<List<Car>>>()
-    private val focalPointLiveData = MutableLiveData<Point>()
+    private val focalPointLiveData = MutableLiveData<LatLngBounds>()
 
     fun cars(): LiveData<Resource<List<Car>>> {
         return carsLiveData
@@ -35,7 +37,7 @@ class CarViewModel(
                     { cars ->
                         carsLiveData.value = Resource.Success(cars)
                         focalPointLiveData.value =
-                            focalPointProvider.getFocalPoint(getCarLocations(cars))
+                            focalAreaProvider.getFocalArea(getCarLocations(cars))
                     },
                     { error -> carsLiveData.value =
                         Resource.Error(error.message ?: DEFAULT_ERROR_MESSAGE)
@@ -44,12 +46,12 @@ class CarViewModel(
         )
     }
 
-    fun focalPoint(): LiveData<Point> {
+    fun focalArea(): LiveData<LatLngBounds> {
         return focalPointLiveData
     }
 
-    private fun getCarLocations(cars : List<Car>) : List<Point> {
-        return cars.map { Point(it.latitude, it.longitude) }
+    private fun getCarLocations(cars : List<Car>) : List<LatLng> {
+        return cars.map { LatLng(it.latitude, it.longitude) }
     }
 
     override fun onCleared() {

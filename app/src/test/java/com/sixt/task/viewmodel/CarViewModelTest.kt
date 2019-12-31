@@ -6,7 +6,6 @@ import com.sixt.task.model.CarRepository
 import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
 import com.sixt.task.model.vo.Point
-import com.sixt.task.network.di.NetworkModule
 import com.sixt.task.util.SchedulerProvider
 import com.sixt.task.util.getCarsList
 import com.sixt.task.util.getReducedCarsList
@@ -121,7 +120,7 @@ class CarViewModelTest : KoinTest {
 
     @Test
     fun `Given the list of cars is provided by the service, when loadData is called, the observer must be notified of the current focal point of all cars positions `() {
-        viewModel.focalPoint().observeForever(mockedFocalPointObserver)
+        viewModel.focalArea().observeForever(mockedFocalPointObserver)
         every { repository.getCars() } returns Single.just(getReducedCarsList())
 
         viewModel.loadData()
