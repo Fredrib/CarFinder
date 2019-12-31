@@ -7,8 +7,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.sixt.task.model.CarRepository
 import com.sixt.task.model.FocalAreaProvider
-import com.sixt.task.model.vo.Car
+import com.sixt.task.model.vo.CarVO
 import com.sixt.task.model.Resource
+import com.sixt.task.model.vo.CarDTO
 import com.sixt.task.util.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
@@ -19,8 +20,8 @@ class CarViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    private val carsLiveData = MutableLiveData<Resource<List<Car>>>()
-    private val selectedCarLiveData = MutableLiveData<Car>()
+    private val carsLiveData = MutableLiveData<Resource<List<CarDTO>>>()
+    private val selectedCarLiveData = MutableLiveData<CarDTO>()
     private val focalPointLiveData = MutableLiveData<LatLngBounds>()
 
     fun loadData() {
@@ -51,7 +52,7 @@ class CarViewModel(
         )
     }
 
-    fun cars(): LiveData<Resource<List<Car>>> {
+    fun cars(): LiveData<Resource<List<CarDTO>>> {
         return carsLiveData
     }
 
@@ -59,15 +60,15 @@ class CarViewModel(
         return focalPointLiveData
     }
 
-    fun selectedCar() : LiveData<Car> {
+    fun selectedCar() : LiveData<CarDTO> {
         return selectedCarLiveData
     }
 
-    fun selectCar(car: Car) {
+    fun selectCar(car: CarDTO) {
         repository.selectCar(car)
     }
 
-    private fun getCarLocations(cars : List<Car>) : List<LatLng> {
+    private fun getCarLocations(cars : List<CarDTO>) : List<LatLng> {
         return cars.map { LatLng(it.latitude, it.longitude) }
     }
 

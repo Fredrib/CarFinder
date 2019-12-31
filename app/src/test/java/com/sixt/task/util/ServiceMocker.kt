@@ -1,28 +1,30 @@
 package com.sixt.task.util
 
-import com.sixt.task.model.vo.Car
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.sixt.task.model.vo.CarDTO
+import com.sixt.task.model.vo.CarVO
 import com.sixt.task.util.UnitTestUtils.getJson
 import java.lang.reflect.Type
 
-fun getRawCarList(): List<Car> {
+fun getRawCarList(): List<CarVO> {
     return getCarList("cars.json")
 }
 
-fun getTransformedCarList(list: List<Car>): List<Car> {
-    return list.onEach { car ->
-        car.fuelType = getFullTypeName(car.fuelType)
-        car.transmission = getTransmissionName(car.transmission)
-    }
+fun getCarList() : List<CarDTO> {
+    return getTransformedCarList(getRawCarList())
 }
 
-fun getReducedCarsList() : List<Car> {
-    return getCarList("other_cars.json")
+fun getTransformedCarList(list: List<CarVO>): List<CarDTO> {
+    return list.map { CarDTO(it) }
 }
 
-fun getCar() : Car {
-    return getObject("car.json", Car::class.java)
+fun getReducedCarsList() : List<CarDTO> {
+    return getTransformedCarList(getCarList("other_cars.json"))
+}
+
+fun getCar() : CarDTO {
+    return getObject("car.json", CarDTO::class.java)
 }
 
 private fun <T> getObject(fileName: String, classType: Class<T>): T {
@@ -30,27 +32,11 @@ private fun <T> getObject(fileName: String, classType: Class<T>): T {
     return Gson().fromJson(json, classType)
 }
 
-private fun getCarList(listFile: String) : List<Car> {
-    val inputString = UnitTestUtils.getJson(listFile)
+private fun getCarList(listFile: String) : List<CarVO> {
+    val inputString = getJson(listFile)
     return Gson().fromJson(inputString, getCarListType())
 }
 
 private fun getCarListType() : Type {
-    return object : TypeToken<ArrayList<Car?>?>() {}.type
-}
-
-private fun getFullTypeName(fuelType: String) : String {
-    return when (fuelType) {
-        "D" -> "Diesel"
-        "P" -> "Petrol"
-        else -> fuelType
-    }
-}
-
-private fun getTransmissionName(transmission: String) : String {
-    return when (transmission) {
-        "M" -> "Manual"
-        "A" -> "Automatic"
-        else -> transmission
-    }
+    return object : TypeToken<ArrayList<CarVO?>?>() {}.type
 }

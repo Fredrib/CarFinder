@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/carImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/base_margins"
+            android:layout_marginTop="@dimen/base_margins"
+            android:contentDescription="@string/car_image_description"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toStartOf="@+id/modelTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/car_img_placeholder" />
+
+        <TextView
+            android:id="@+id/modelTextView"
+            style="@style/PrimaryTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_margins"
+            android:layout_marginEnd="@dimen/base_margins"
+            app:layout_constraintBottom_toTopOf="@+id/makeTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/carImageView"
+            app:layout_constraintTop_toTopOf="@+id/carImageView"
+            tools:text="MINI" />
+
+        <TextView
+            android:id="@+id/makeTextView"
+            style="@style/SecondaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_grid"
+            app:layout_constraintBottom_toTopOf="@+id/licencePlateTextView"
+            app:layout_constraintStart_toStartOf="@+id/modelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/modelTextView"
+            tools:text="BMW" />
+
+        <TextView
+            android:id="@+id/licencePlateTextView"
+            style="@style/ThirdTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_grid"
+            app:layout_constraintBottom_toBottomOf="@+id/carImageView"
+            app:layout_constraintStart_toStartOf="@+id/makeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/makeTextView"
+            tools:text="L-AE1025" />
+
+        <ImageView
+            android:id="@+id/transmissionImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/car_transmission_image_description"
+            android:src="@drawable/ic_car_transmission"
+            app:layout_constraintStart_toStartOf="@+id/carImageView"
+            app:layout_constraintTop_toBottomOf="@+id/carImageView" />
+
+        <TextView
+            android:id="@+id/transmissionLabelTextView"
+            style="@style/PrimaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_transmission_label"
+            android:layout_marginStart="@dimen/text_grid"
+            app:layout_constraintBottom_toBottomOf="@+id/transmissionImageView"
+            app:layout_constraintLeft_toLeftOf="@+id/carImageView"
+            app:layout_constraintStart_toEndOf="@+id/transmissionImageView"
+            app:layout_constraintTop_toTopOf="@+id/transmissionImageView" />
+
+        <TextView
+            android:id="@+id/transmissionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SecondaryTextView"
+            android:layout_marginStart="@dimen/base_margins"
+            app:layout_constraintLeft_toRightOf="@+id/transmissionLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/transmissionLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/transmissionLabelTextView"
+            tools:text="Automatic" />
+
+        <ImageView
+            android:id="@+id/fuelImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_margins"
+            android:contentDescription="@string/car_fuel_image_description"
+            android:src="@drawable/ic_fuel"
+            app:layout_constraintTop_toBottomOf="@+id/transmissionImageView"
+            app:layout_constraintStart_toStartOf="@+id/transmissionImageView"/>
+
+        <TextView
+            android:id="@+id/fuelLabelTextView"
+            style="@style/PrimaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_fuel_type_label"
+            android:layout_marginStart="@dimen/text_grid"
+            app:layout_constraintBottom_toBottomOf="@+id/fuelImageView"
+            app:layout_constraintLeft_toLeftOf="@+id/fuelImageView"
+            app:layout_constraintStart_toEndOf="@+id/fuelImageView"
+            app:layout_constraintTop_toTopOf="@+id/fuelImageView" />
+
+        <TextView
+            android:id="@+id/fuelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SecondaryTextView"
+            android:layout_marginStart="@dimen/base_margins"
+            app:layout_constraintLeft_toRightOf="@+id/fuelLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/fuelLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/fuelLabelTextView"
+            tools:text="Diesel" />
+
+        <ImageView
+            android:id="@+id/tankImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_margins"
+            android:src="@drawable/ic_level"
+            app:layout_constraintTop_toBottomOf="@+id/fuelImageView"
+            app:layout_constraintStart_toStartOf="@+id/fuelImageView"/>
+
+        <TextView
+            android:id="@+id/tankLabelTextView"
+            style="@style/PrimaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_fuel_level_label"
+            android:layout_marginStart="@dimen/text_grid"
+            app:layout_constraintBottom_toBottomOf="@+id/tankImageView"
+            app:layout_constraintLeft_toLeftOf="@+id/tankImageView"
+            app:layout_constraintStart_toEndOf="@+id/tankImageView"
+            app:layout_constraintTop_toTopOf="@+id/tankImageView" />
+
+        <TextView
+            android:id="@+id/tankTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SecondaryTextView"
+            android:layout_marginStart="@dimen/base_margins"
+            app:layout_constraintLeft_toRightOf="@+id/tankLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/tankLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/tankLabelTextView"
+            tools:text="50%" />
+
+        <ImageView
+            android:id="@+id/colorImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_margins"
+            android:src="@drawable/ic_color"
+            app:layout_constraintTop_toBottomOf="@+id/tankImageView"
+            app:layout_constraintStart_toStartOf="@+id/tankImageView"/>
+
+        <TextView
+            android:id="@+id/colorLabelTextView"
+            style="@style/PrimaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_color_label"
+            android:layout_marginStart="@dimen/text_grid"
+            app:layout_constraintBottom_toBottomOf="@+id/colorImageView"
+            app:layout_constraintLeft_toLeftOf="@+id/colorImageView"
+            app:layout_constraintStart_toEndOf="@+id/colorImageView"
+            app:layout_constraintTop_toTopOf="@+id/colorImageView" />
+
+        <TextView
+            android:id="@+id/colorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SecondaryTextView"
+            android:layout_marginStart="@dimen/base_margins"
+            app:layout_constraintLeft_toRightOf="@+id/colorLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/colorLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/colorLabelTextView"
+            tools:text="Black" />
+
+        <ImageView
+            android:id="@+id/cleanlinessImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_margins"
+            android:src="@drawable/ic_clean"
+            app:layout_constraintTop_toBottomOf="@+id/colorImageView"
+            app:layout_constraintStart_toStartOf="@+id/colorImageView"/>
+
+        <TextView
+            android:id="@+id/cleanlinessLabelTextView"
+            style="@style/PrimaryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_cleanliness_label"
+            android:layout_marginStart="@dimen/text_grid"
+            app:layout_constraintBottom_toBottomOf="@+id/cleanlinessImageView"
+            app:layout_constraintLeft_toLeftOf="@+id/cleanlinessImageView"
+            app:layout_constraintStart_toEndOf="@+id/cleanlinessImageView"
+            app:layout_constraintTop_toTopOf="@+id/cleanlinessImageView" />
+
+        <TextView
+            android:id="@+id/cleanlinessTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SecondaryTextView"
+            android:layout_marginStart="@dimen/base_margins"
+            app:layout_constraintLeft_toRightOf="@+id/cleanlinessLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/cleanlinessLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/cleanlinessLabelTextView"
+            tools:text="Regular" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

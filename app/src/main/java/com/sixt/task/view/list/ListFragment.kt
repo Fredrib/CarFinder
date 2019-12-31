@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.sixt.task.R
 import com.sixt.task.model.Resource
-import com.sixt.task.model.vo.Car
+import com.sixt.task.model.vo.CarDTO
+import com.sixt.task.model.vo.CarVO
 import com.sixt.task.viewmodel.CarViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -61,7 +62,7 @@ class ListFragment : Fragment(), CarListAdapter.SelectionListener{
 
         viewModel.loadData()
 
-        viewModel.cars().observe(this, Observer<Resource<List<Car>>> { resource ->
+        viewModel.cars().observe(this, Observer<Resource<List<CarDTO>>> { resource ->
             resource?.let {
                 when (resource) {
                     is Resource.Loading -> {
@@ -89,7 +90,7 @@ class ListFragment : Fragment(), CarListAdapter.SelectionListener{
         super.onStop()
     }
 
-    override fun onSelect(car: Car) {
+    override fun onSelect(car: CarDTO) {
         viewModel.selectCar(car)
         activity?.finish()
     }

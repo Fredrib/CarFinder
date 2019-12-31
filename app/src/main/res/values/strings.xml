@@ -3,10 +3,16 @@
     <string name="title_activity_maps">Car Finder</string>
     <string name="title_activity_list">Cars</string>
 
+
     <!-- Car List Item -->
     <string name="error_loading_list">Could not load car list</string>
     <string name="btn_try_again_text">Try Again</string>
     <string name="car_image_description">Car Model Image</string>
     <string name="car_transmission_image_description">Car Transmission Image</string>
     <string name="car_fuel_image_description">Car Fuel Image</string>
+    <string name="car_fuel_type_label">Fuel Type</string>
+    <string name="car_fuel_level_label">Tank Level</string>
+    <string name="car_transmission_label">Transmission</string>
+    <string name="car_cleanliness_label">Inner Cleanliness</string>
+    <string name="car_color_label">Color</string>
 </resources>

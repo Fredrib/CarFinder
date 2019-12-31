@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF9B5A</color>
 
     <color name="colorTextDarkTheme">#FFFFFF</color>
-    <color name="colorTextLightTheme">#000000</color>
+    <color name="colorPrimaryTextLightTheme">#000000</color>
+    <color name="colorSecondaryTextLightTheme">#2C2C2C</color>
 </resources>

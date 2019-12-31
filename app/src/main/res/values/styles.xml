@@ -17,5 +17,24 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/colorTextDarkTheme</item>
     </style>
-        
+
+    <style name="PrimaryTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/colorPrimaryTextLightTheme</item>
+        <item name="android:textSize">@dimen/text_size_H4</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SecondaryTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/colorSecondaryTextLightTheme</item>
+        <item name="android:textSize">@dimen/text_size_H2</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="ThirdTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/text_size_H1</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BottomSheet" parent="Theme.MaterialComponents.Light.BottomSheetDialog"/>
+
 </resources>

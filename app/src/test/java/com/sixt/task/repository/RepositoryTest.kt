@@ -58,7 +58,8 @@ class RepositoryTest : KoinTest {
         carRepository
             .getCars()
             .test()
-            .assertResult(expectedResult)
+            .assertValue { it.forEachIndexed( (index, car) -> )
+            }}
     }
 
     @Test

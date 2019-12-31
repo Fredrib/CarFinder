@@ -3,7 +3,7 @@ package com.sixt.task.model.vo
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
 
-data class Car(
+data class CarVO(
 
     @SerializedName("id")
     val id: String,

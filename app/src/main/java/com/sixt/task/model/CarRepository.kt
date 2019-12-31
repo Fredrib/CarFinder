@@ -1,12 +1,13 @@
 package com.sixt.task.model
 
-import com.sixt.task.model.vo.Car
+import com.sixt.task.model.vo.CarDTO
+import com.sixt.task.model.vo.CarVO
 import io.reactivex.Maybe
 import io.reactivex.Single
 
 interface CarRepository {
 
-    fun getCars(): Single<List<Car>>
-    fun selectCar(car: Car)
-    fun getSelectedCar(): Maybe<Car>
+    fun getCars(): Single<List<CarDTO>>
+    fun selectCar(car: CarDTO)
+    fun getSelectedCar(): Maybe<CarDTO>
 }

@@ -20,42 +20,45 @@
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toStartOf="@+id/modelTextView"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/car_img_placeholder" />
 
         <TextView
             android:id="@+id/modelTextView"
+            style="@style/PrimaryTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_margins"
             android:layout_marginEnd="@dimen/base_margins"
-            android:textSize="@dimen/text_size_H4"
+            app:layout_constraintBottom_toTopOf="@+id/makeTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/carImageView"
             app:layout_constraintTop_toTopOf="@+id/carImageView"
-            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintHorizontal_chainStyle="packed"
             tools:text="MINI" />
 
         <TextView
             android:id="@+id/makeTextView"
+            style="@style/SecondaryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_grid"
-            android:textSize="@dimen/text_size_H2"
+            app:layout_constraintBottom_toTopOf="@+id/licencePlateTextView"
             app:layout_constraintStart_toStartOf="@+id/modelTextView"
             app:layout_constraintTop_toBottomOf="@+id/modelTextView"
             tools:text="BMW" />
 
         <TextView
             android:id="@+id/licencePlateTextView"
+            style="@style/ThirdTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_grid"
-            android:textSize="@dimen/text_size_H1"
             app:layout_constraintBottom_toBottomOf="@+id/carImageView"
             app:layout_constraintStart_toStartOf="@+id/makeTextView"
             app:layout_constraintTop_toBottomOf="@+id/makeTextView"

@@ -7,12 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sixt.task.R
-import com.sixt.task.model.vo.Car
+import com.sixt.task.model.vo.CarDTO
+import com.sixt.task.model.vo.CarVO
 import com.squareup.picasso.Picasso
 
 class CarListAdapter : RecyclerView.Adapter<CarListAdapter.CarListViewHolder>() {
 
-    private val list = arrayListOf<Car>()
+    private val list = arrayListOf<CarDTO>()
     private var listener: SelectionListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarListViewHolder {
@@ -26,7 +27,7 @@ class CarListAdapter : RecyclerView.Adapter<CarListAdapter.CarListViewHolder>() 
         val item = list[position]
         holder.model.text = item.model
         holder.make.text = item.make
-        holder.licensePlate.text = item.licensePlate
+        holder.licensePlate.text = item.plate
         holder.transmissionType.text = item.transmission
         holder.fuelType.text = item.fuelType
 
@@ -39,7 +40,7 @@ class CarListAdapter : RecyclerView.Adapter<CarListAdapter.CarListViewHolder>() 
             .into(holder.image)
     }
 
-    fun setList(list: List<Car>) {
+    fun setList(list: List<CarDTO>) {
         this.list.clear()
         this.list.addAll(list)
         notifyDataSetChanged()
@@ -54,7 +55,7 @@ class CarListAdapter : RecyclerView.Adapter<CarListAdapter.CarListViewHolder>() 
     }
 
     interface SelectionListener {
-        fun onSelect(car: Car)
+        fun onSelect(car: CarDTO)
     }
 
     class CarListViewHolder(

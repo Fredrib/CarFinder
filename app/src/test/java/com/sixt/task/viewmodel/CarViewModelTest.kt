@@ -4,12 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.model.LatLngBounds
 import com.sixt.task.model.CarRepository
-import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
+import com.sixt.task.model.vo.CarDTO
 import com.sixt.task.util.SchedulerProvider
 import com.sixt.task.util.UnitTestUtils
 import com.sixt.task.util.getCar
-import com.sixt.task.util.getRawCarList
+import com.sixt.task.util.getCarList
 import com.sixt.task.util.getReducedCarsList
 import com.sixt.task.viewmodel.di.CarModule
 import io.mockk.every
@@ -37,9 +37,9 @@ class CarViewModelTest : KoinTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val repository = mockk<CarRepository>(relaxed = true)
-    private val mockedResourceObserver = mockk<Observer<Resource<List<Car>>>>(relaxed = true)
+    private val mockedResourceObserver = mockk<Observer<Resource<List<CarDTO>>>>(relaxed = true)
     private val mockedFocalPointObserver = mockk<Observer<LatLngBounds>>(relaxed = true)
-    private val mockedSelectedCarObserver = mockk<Observer<Car>>(relaxed = true)
+    private val mockedSelectedCarObserver = mockk<Observer<CarDTO>>(relaxed = true)
     private val viewModel: CarViewModel by inject()
 
     @Before
@@ -66,13 +66,13 @@ class CarViewModelTest : KoinTest {
     fun `Given the car list is available, when loadData method is called, then the observer must be notified of data being loaded and then the successful cars list`() {
         viewModel.cars().observeForever(mockedResourceObserver)
 
-        val response = getRawCarList()
+        val response = getCarList()
         every { repository.getCars() } returns Single.just(response)
 
         viewModel.loadData()
 
-        val slot1 = slot<Resource<List<Car>>>()
-        val slot2 = slot<Resource<List<Car>>>()
+        val slot1 = slot<Resource<List<CarDTO>>>()
+        val slot2 = slot<Resource<List<CarDTO>>>()
         verifySequence {
             mockedResourceObserver.onChanged(capture(slot1))
             mockedResourceObserver.onChanged(capture(slot2))
@@ -92,8 +92,8 @@ class CarViewModelTest : KoinTest {
 
         viewModel.loadData()
 
-        val slot1 = slot<Resource<List<Car>>>()
-        val slot2 = slot<Resource<List<Car>>>()
+        val slot1 = slot<Resource<List<CarDTO>>>()
+        val slot2 = slot<Resource<List<CarDTO>>>()
         verifySequence {
             mockedResourceObserver.onChanged(capture(slot1))
             mockedResourceObserver.onChanged(capture(slot2))
@@ -113,7 +113,7 @@ class CarViewModelTest : KoinTest {
 
         viewModel.loadData()
 
-        val slot = slot<Resource<List<Car>>>()
+        val slot = slot<Resource<List<CarDTO>>>()
         verify {
             mockedResourceObserver.onChanged(capture(slot))
         }
@@ -147,7 +147,7 @@ class CarViewModelTest : KoinTest {
 
         viewModel.loadSelection()
 
-        val slot = slot<Car>()
+        val slot = slot<CarDTO>()
         verify(exactly = 1) { mockedSelectedCarObserver.onChanged(capture(slot)) }
 
         assert(slot.captured == car)

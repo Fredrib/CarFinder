@@ -22,7 +22,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.sixt.task.R
 import com.sixt.task.model.Resource
-import com.sixt.task.model.vo.Car
+import com.sixt.task.model.vo.CarDTO
+import com.sixt.task.model.vo.CarVO
 import com.sixt.task.view.list.ListActivity
 import com.sixt.task.viewmodel.CarViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,7 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     ) {
         map = googleMap
 
-        viewModel.cars().observe(this, Observer<Resource<List<Car>>> { resource ->
+        viewModel.cars().observe(this, Observer<Resource<List<CarDTO>>> { resource ->
             resource?.let {
                 when (resource) {
                     is Resource.Loading -> Unit
@@ -97,7 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun placeCars(
-        cars: List<Car>
+        cars: List<CarDTO>
     ) {
         cars.forEach { car ->
             val coords = LatLng(car.latitude, car.longitude)
@@ -105,7 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 MarkerOptions()
                     .position(coords)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_car))
-                    .title(car.driverName)
+                    .title(car.name)
             )
             marker.tag = car
         }

@@ -2,7 +2,7 @@ package com.sixt.task.util
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.sixt.task.model.vo.Car
+import com.sixt.task.model.vo.CarDTO
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 
@@ -44,7 +44,7 @@ object UnitTestUtils {
         return json
     }
 
-    fun getBoundsFromCarPosition(cars: List<Car>) : LatLngBounds {
+    fun getBoundsFromCarPosition(cars: List<CarDTO>) : LatLngBounds {
         val builder = LatLngBounds.builder()
         cars.forEach { car -> builder.include(LatLng(car.latitude, car.longitude)) }
         return builder.build()
