@@ -1,4 +1,4 @@
-package com.sixt.task.view
+package com.sixt.task.view.list
 
 import android.os.Bundle
 import android.util.Log
@@ -43,7 +43,7 @@ class ListFragment : Fragment() {
 
         viewModel.loadData()
 
-        viewModel.getCars().observe(this, Observer<Resource<List<Car>>> { resource ->
+        viewModel.cars().observe(this, Observer<Resource<List<Car>>> { resource ->
             resource?.let {
                 when (resource) {
                     is Resource.Loading -> Log.e("ListFragment", "showing loading")

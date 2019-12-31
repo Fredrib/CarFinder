@@ -42,10 +42,10 @@ data class Car(
     val licensePlate: String,
 
     @SerializedName("latitude")
-    val latitude: BigDecimal,
+    val latitude: Double,
 
     @SerializedName("longitude")
-    val longitude: BigDecimal,
+    val longitude: Double,
 
     @SerializedName("innerCleanliness")
     val innerCleanliness: String,

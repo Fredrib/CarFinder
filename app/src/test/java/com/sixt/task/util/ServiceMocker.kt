@@ -6,8 +6,18 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 fun getCarsList(): List<Car> {
-    val inputString = UnitTestUtils.getJson("cars.json")
-    val groupListType: Type = object : TypeToken<ArrayList<Car?>?>() {}.type
+    return getCarList("cars.json")
+}
 
-    return Gson().fromJson(inputString, groupListType)
+fun getReducedCarsList() : List<Car> {
+    return getCarList("other_cars.json")
+}
+
+private fun getCarList(listFile: String) : List<Car> {
+    val inputString = UnitTestUtils.getJson(listFile)
+    return Gson().fromJson(inputString, getCarListType())
+}
+
+private fun getCarListType() : Type {
+    return object : TypeToken<ArrayList<Car?>?>() {}.type
 }

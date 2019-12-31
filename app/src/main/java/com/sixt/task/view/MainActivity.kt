@@ -3,6 +3,7 @@ package com.sixt.task.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.sixt.task.R
+import com.sixt.task.view.list.ListFragment
 
 class MainActivity : AppCompatActivity() {
 

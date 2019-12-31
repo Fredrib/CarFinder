@@ -32,7 +32,7 @@ class ServiceTest : KoinTest {
 
         val serverUrl = server.url("/")
 
-        every { routeProvider.getBaseUrl() } returns serverUrl.toUrl().toString()
+        every { routeProvider.getBaseUrl() } returns serverUrl.url().toString()
         every { connectionVerifier.isConnectionAvailable() } returns true
 
         startKoin {
@@ -46,6 +46,12 @@ class ServiceTest : KoinTest {
                 )
             )
         }
+    }
+
+    @After
+    fun shutdown() {
+        stopKoin()
+        server.shutdown()
     }
 
     @Test
@@ -86,11 +92,5 @@ class ServiceTest : KoinTest {
             .cars()
             .test()
             .assertError(HttpException::class.java)
-    }
-
-    @After
-    fun shutdown() {
-        stopKoin()
-        server.shutdown()
     }
 }

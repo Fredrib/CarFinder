@@ -5,37 +5,63 @@ import androidx.lifecycle.Observer
 import com.sixt.task.model.CarRepository
 import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
+import com.sixt.task.model.vo.Point
+import com.sixt.task.network.di.NetworkModule
 import com.sixt.task.util.SchedulerProvider
 import com.sixt.task.util.getCarsList
+import com.sixt.task.util.getReducedCarsList
+import com.sixt.task.viewmodel.di.CarModule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifySequence
 import io.reactivex.Single
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class CarViewModelTest {
+class CarViewModelTest : KoinTest {
 
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val repository = mockk<CarRepository>(relaxed = true)
-    private val mockedObserver = mockk<Observer<Resource<List<Car>>>>(relaxed = true)
-    private lateinit var viewModel: CarViewModel
+    private val mockedResourceObserver = mockk<Observer<Resource<List<Car>>>>(relaxed = true)
+    private val mockedFocalPointObserver = mockk<Observer<Point>>(relaxed = true)
+    private val viewModel: CarViewModel by inject()
 
     @Before
     fun setUp() {
-        viewModel = CarViewModel(repository, SchedulerProvider.Testing)
+        startKoin {
+            modules(
+                listOf(
+                    CarModule.instance,
+                    module {
+                        factory(override = true) { repository }
+                        factory<SchedulerProvider>(override = true) { SchedulerProvider.Testing }
+                    }
+                )
+            )
+        }
+    }
+
+    @After
+    fun shutdown() {
+        stopKoin()
     }
 
     @Test
     fun `Given the car list is available, when loadData method is called, then the observer must be notified of data being loaded and then the successful cars list`() {
-        viewModel.getCars().observeForever(mockedObserver)
+        viewModel.cars().observeForever(mockedResourceObserver)
 
         val response = getCarsList()
         every { repository.getCars() } returns Single.just(response)
@@ -45,8 +71,8 @@ class CarViewModelTest {
         val slot1 = slot<Resource<List<Car>>>()
         val slot2 = slot<Resource<List<Car>>>()
         verifySequence {
-            mockedObserver.onChanged(capture(slot1))
-            mockedObserver.onChanged(capture(slot2))
+            mockedResourceObserver.onChanged(capture(slot1))
+            mockedResourceObserver.onChanged(capture(slot2))
         }
 
         assert(slot1.captured is Resource.Loading)
@@ -55,7 +81,7 @@ class CarViewModelTest {
 
     @Test
     fun `Given an error occurred, when loadData method is called, then the observer must be notified of data being loaded and then the error`() {
-        viewModel.getCars().observeForever(mockedObserver)
+        viewModel.cars().observeForever(mockedResourceObserver)
 
         val errorMessage = "Some error message"
         val response = Throwable(errorMessage)
@@ -66,8 +92,8 @@ class CarViewModelTest {
         val slot1 = slot<Resource<List<Car>>>()
         val slot2 = slot<Resource<List<Car>>>()
         verifySequence {
-            mockedObserver.onChanged(capture(slot1))
-            mockedObserver.onChanged(capture(slot2))
+            mockedResourceObserver.onChanged(capture(slot1))
+            mockedResourceObserver.onChanged(capture(slot2))
         }
 
         assert(slot1.captured is Resource.Loading)
@@ -77,7 +103,7 @@ class CarViewModelTest {
 
     @Test
     fun `Given an error occurred without any custom message, when loadData method is called, then the observer must be notified of data being loaded and then the error with default message`() {
-        viewModel.getCars().observeForever(mockedObserver)
+        viewModel.cars().observeForever(mockedResourceObserver)
 
         val response = Throwable()
         every { repository.getCars() } returns Single.error(response)
@@ -86,10 +112,24 @@ class CarViewModelTest {
 
         val slot = slot<Resource<List<Car>>>()
         verify {
-            mockedObserver.onChanged(capture(slot))
+            mockedResourceObserver.onChanged(capture(slot))
         }
 
         val resource = slot.captured
         assert(resource is Resource.Error && resource.message == "Could not get cars location, please try again later.")
+    }
+
+    @Test
+    fun `Given the list of cars is provided by the service, when loadData is called, the observer must be notified of the current focal point of all cars positions `() {
+        viewModel.focalPoint().observeForever(mockedFocalPointObserver)
+        every { repository.getCars() } returns Single.just(getReducedCarsList())
+
+        viewModel.loadData()
+
+        val slot = slot<Point>()
+        verify(exactly = 1) { mockedFocalPointObserver.onChanged(capture(slot)) }
+
+        assert(slot.captured == Point(48.152514, 11.585504))
+
     }
 }

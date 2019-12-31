@@ -1,4 +1,4 @@
-package com.sixt.task.view
+package com.sixt.task.view.list
 
 import android.view.LayoutInflater
 import android.view.View
