@@ -8,7 +8,8 @@ import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
 import com.sixt.task.util.SchedulerProvider
 import com.sixt.task.util.UnitTestUtils
-import com.sixt.task.util.getCarsList
+import com.sixt.task.util.getCar
+import com.sixt.task.util.getRawCarList
 import com.sixt.task.util.getReducedCarsList
 import com.sixt.task.viewmodel.di.CarModule
 import io.mockk.every
@@ -16,6 +17,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifySequence
+import io.reactivex.Maybe
 import io.reactivex.Single
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -37,6 +39,7 @@ class CarViewModelTest : KoinTest {
     private val repository = mockk<CarRepository>(relaxed = true)
     private val mockedResourceObserver = mockk<Observer<Resource<List<Car>>>>(relaxed = true)
     private val mockedFocalPointObserver = mockk<Observer<LatLngBounds>>(relaxed = true)
+    private val mockedSelectedCarObserver = mockk<Observer<Car>>(relaxed = true)
     private val viewModel: CarViewModel by inject()
 
     @Before
@@ -63,7 +66,7 @@ class CarViewModelTest : KoinTest {
     fun `Given the car list is available, when loadData method is called, then the observer must be notified of data being loaded and then the successful cars list`() {
         viewModel.cars().observeForever(mockedResourceObserver)
 
-        val response = getCarsList()
+        val response = getRawCarList()
         every { repository.getCars() } returns Single.just(response)
 
         viewModel.loadData()
@@ -133,5 +136,20 @@ class CarViewModelTest : KoinTest {
         verify(exactly = 1) { mockedFocalPointObserver.onChanged(capture(slot)) }
 
         assert(slot.captured == expectedBounds)
+    }
+
+    @Test
+    fun `Given a car is selected, the observer must be notified of the selection`() {
+        viewModel.selectedCar().observeForever(mockedSelectedCarObserver)
+
+        val car = getCar()
+        every { repository.getSelectedCar() } returns Maybe.just(car)
+
+        viewModel.loadSelection()
+
+        val slot = slot<Car>()
+        verify(exactly = 1) { mockedSelectedCarObserver.onChanged(capture(slot)) }
+
+        assert(slot.captured == car)
     }
 }

@@ -13,7 +13,7 @@ object CarModule {
 
     val instance = module {
 
-        factory<CarRepository> { DefaultCarRepository(get()) }
+        single<CarRepository> { DefaultCarRepository(get()) }
         factory<SchedulerProvider> { SchedulerProvider.Default }
         factory<FocalAreaProvider> { DefaultFocalAreaProvider() }
 

@@ -30,13 +30,13 @@ data class Car(
     val series: String,
 
     @SerializedName("fuelType")
-    val fuelType: String,
+    var fuelType: String,
 
     @SerializedName("fuelLevel")
     val fuelLevel: Float,
 
     @SerializedName("transmission")
-    val transmission: String,
+    var transmission: String,
 
     @SerializedName("licensePlate")
     val licensePlate: String,

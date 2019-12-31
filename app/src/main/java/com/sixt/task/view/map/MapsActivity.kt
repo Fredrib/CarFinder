@@ -49,15 +49,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.loadData()
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(
         googleMap: GoogleMap
     ) {
@@ -78,13 +69,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.focalArea().observe(this, Observer { point ->
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(point, 0))
+
+            viewModel.selectedCar().observe(this, Observer { car ->
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(car.latitude, car.longitude),
+                        ZOOM_STREET_LEVEL
+                    )
+                )
+            })
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadSelection()
     }
 
     private fun placeCars(
         cars: List<Car>
     ) {
-        cars.forEach {car ->
+        cars.forEach { car ->
             val coords = LatLng(car.latitude, car.longitude)
             map.addMarker(
                 MarkerOptions()
@@ -100,15 +105,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun openList() {
-        startActivityForResult(
-            Intent(this, ListActivity::class.java),
-            LIST_REQUEST_CODE
-        )
+        startActivity(Intent(this, ListActivity::class.java))
     }
 
     private fun bitmapDescriptorFromVector(
         context: Context,
-        vectorResId:Int
+        vectorResId: Int
     ): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
 
@@ -124,7 +126,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 vectorDrawable.intrinsicHeight,
                 Bitmap.Config.ARGB_8888
             )
-            val canvas =  Canvas(bitmap)
+            val canvas = Canvas(bitmap)
             vectorDrawable.draw(canvas)
             return BitmapDescriptorFactory.fromBitmap(bitmap)
         }
@@ -133,6 +135,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        const val LIST_REQUEST_CODE = 0x01
+        private const val ZOOM_STREET_LEVEL = 15f
     }
 }

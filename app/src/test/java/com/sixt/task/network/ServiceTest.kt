@@ -2,7 +2,7 @@ package com.sixt.task.network
 
 import com.sixt.task.network.di.NetworkModule
 import com.sixt.task.util.MockResponseFileReader
-import com.sixt.task.util.getCarsList
+import com.sixt.task.util.getRawCarList
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
@@ -60,7 +60,7 @@ class ServiceTest : KoinTest {
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(MockResponseFileReader("cars.json").content)
 
-        val expectedResponse = getCarsList()
+        val expectedResponse = getRawCarList()
 
         server.enqueue(response)
 

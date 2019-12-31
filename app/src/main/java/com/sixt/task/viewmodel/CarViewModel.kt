@@ -20,17 +20,14 @@ class CarViewModel(
 
     private val disposables = CompositeDisposable()
     private val carsLiveData = MutableLiveData<Resource<List<Car>>>()
+    private val selectedCarLiveData = MutableLiveData<Car>()
     private val focalPointLiveData = MutableLiveData<LatLngBounds>()
-
-    fun cars(): LiveData<Resource<List<Car>>> {
-        return carsLiveData
-    }
 
     fun loadData() {
         disposables.add(
             repository
                 .getCars()
-                .compose(schedulerProvider.applySchedulers())
+                .compose(schedulerProvider.applySingleSchedulers())
                 .doOnSubscribe { carsLiveData.value = Resource.Loading() }
                 .subscribe(
                     { cars ->
@@ -45,8 +42,29 @@ class CarViewModel(
         )
     }
 
+    fun loadSelection() {
+        disposables.add(
+            repository
+                .getSelectedCar()
+                .compose(schedulerProvider.applyMaybeSchedulers())
+                .subscribe { car -> selectedCarLiveData.value = car }
+        )
+    }
+
+    fun cars(): LiveData<Resource<List<Car>>> {
+        return carsLiveData
+    }
+
     fun focalArea(): LiveData<LatLngBounds> {
         return focalPointLiveData
+    }
+
+    fun selectedCar() : LiveData<Car> {
+        return selectedCarLiveData
+    }
+
+    fun selectCar(car: Car) {
+        repository.selectCar(car)
     }
 
     private fun getCarLocations(cars : List<Car>) : List<LatLng> {
@@ -55,6 +73,7 @@ class CarViewModel(
 
     override fun onCleared() {
         disposables.clear()
+        super.onCleared()
     }
 
     companion object {
