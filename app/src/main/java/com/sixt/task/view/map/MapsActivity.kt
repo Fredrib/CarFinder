@@ -6,9 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,8 +16,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.sixt.task.R
 import com.sixt.task.model.Resource
 import com.sixt.task.model.vo.Car
@@ -28,7 +27,7 @@ import com.sixt.task.view.list.ListActivity
 import com.sixt.task.viewmodel.CarViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private lateinit var map: GoogleMap
     private val viewModel by viewModel<CarViewModel>()
@@ -57,8 +56,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.cars().observe(this, Observer<Resource<List<Car>>> { resource ->
             resource?.let {
                 when (resource) {
-                    is Resource.Loading -> Log.e("ListFragment", "showing loading")
-                    is Resource.Error -> Log.e("ListFragment", "showing error")
+                    is Resource.Loading -> Unit
+                    is Resource.Error -> it.message?.let { message -> showError(message) }
                     is Resource.Success -> {
                         it.data?.let { list -> placeCars(list) }
                         enableListButton()
@@ -77,8 +76,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         ZOOM_STREET_LEVEL
                     )
                 )
+
+
             })
         })
+
+        map.setOnMarkerClickListener(this)
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        marker?.let {
+            // TODO: add the bottom sheet detail display
+        }
+        return false
     }
 
     override fun onResume() {
@@ -91,12 +101,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     ) {
         cars.forEach { car ->
             val coords = LatLng(car.latitude, car.longitude)
-            map.addMarker(
+            val marker = map.addMarker(
                 MarkerOptions()
                     .position(coords)
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_car))
                     .title(car.driverName)
             )
+            marker.tag = car
         }
     }
 
@@ -132,6 +143,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         throw Exception("Could not find the vector resource. Check the resource id.")
+    }
+
+    private fun showError(message: String) {
+        Snackbar
+            .make(window.decorView.rootView, message , Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.btn_try_again_text) { viewModel.loadData() }
+            .show()
     }
 
     companion object {
