@@ -2,11 +2,12 @@ package com.sixt.task.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.google.android.gms.maps.model.LatLngBounds
 import com.sixt.task.model.CarRepository
 import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
-import com.sixt.task.model.vo.Point
 import com.sixt.task.util.SchedulerProvider
+import com.sixt.task.util.UnitTestUtils
 import com.sixt.task.util.getCarsList
 import com.sixt.task.util.getReducedCarsList
 import com.sixt.task.viewmodel.di.CarModule
@@ -35,7 +36,7 @@ class CarViewModelTest : KoinTest {
 
     private val repository = mockk<CarRepository>(relaxed = true)
     private val mockedResourceObserver = mockk<Observer<Resource<List<Car>>>>(relaxed = true)
-    private val mockedFocalPointObserver = mockk<Observer<Point>>(relaxed = true)
+    private val mockedFocalPointObserver = mockk<Observer<LatLngBounds>>(relaxed = true)
     private val viewModel: CarViewModel by inject()
 
     @Before
@@ -121,14 +122,16 @@ class CarViewModelTest : KoinTest {
     @Test
     fun `Given the list of cars is provided by the service, when loadData is called, the observer must be notified of the current focal point of all cars positions `() {
         viewModel.focalArea().observeForever(mockedFocalPointObserver)
-        every { repository.getCars() } returns Single.just(getReducedCarsList())
+
+        val cars = getReducedCarsList()
+        every { repository.getCars() } returns Single.just(cars)
 
         viewModel.loadData()
 
-        val slot = slot<Point>()
+        val expectedBounds = UnitTestUtils.getBoundsFromCarPosition(cars)
+        val slot = slot<LatLngBounds>()
         verify(exactly = 1) { mockedFocalPointObserver.onChanged(capture(slot)) }
 
-        assert(slot.captured == Point(48.152514, 11.585504))
-
+        assert(slot.captured == expectedBounds)
     }
 }

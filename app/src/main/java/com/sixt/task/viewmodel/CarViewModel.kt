@@ -9,7 +9,6 @@ import com.sixt.task.model.CarRepository
 import com.sixt.task.model.FocalAreaProvider
 import com.sixt.task.model.vo.Car
 import com.sixt.task.model.Resource
-import com.sixt.task.model.vo.Point
 import com.sixt.task.util.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
